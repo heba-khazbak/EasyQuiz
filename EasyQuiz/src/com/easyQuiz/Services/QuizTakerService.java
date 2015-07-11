@@ -2,6 +2,7 @@ package com.easyQuiz.Services;
 
 import java.util.Vector;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,6 +12,8 @@ import org.json.simple.JSONObject;
 
 import com.easyQuiz.Model.QuestionBuilder;
 import com.easyQuiz.Model.QuizNameTable;
+import com.easyQuiz.Model.QuizScoreTable;
+import com.easyQuiz.Model.UserEntity;
 
 
 @Path("/")
@@ -30,11 +33,12 @@ public class QuizTakerService {
 		
 		
 		Vector<QuestionBuilder> myQuestions = QuestionBuilder.getQuestions(quiz.quizName);
-		
-		
-		
+
 		JSONArray questionsArray = new JSONArray();
 		
+		JSONObject first = new JSONObject();
+		first.put("Name",quiz.quizName);
+		questionsArray.add(first);
 		
 		for (int i = 0 ; i < myQuestions.size() ; i++)
 		{
@@ -49,6 +53,22 @@ public class QuizTakerService {
 		}
 		
 		return questionsArray.toString();
+	}
+	
+	@POST
+	@Path("/saveQuizScoreService")
+	public String saveQuizService(@FormParam("userName") String userName,@FormParam("quizName") String quizName,
+			@FormParam("score") String score) {
+		
+		JSONObject object = new JSONObject();
+		QuizScoreTable scoreTable = new QuizScoreTable(userName , quizName , score);
+		scoreTable.saveQuizScore();
+		
+		UserEntity.updateUserScore(userName, score);
+		
+		object.put("Status", "OK");
+		return object.toString();
+	
 	}
 	
 

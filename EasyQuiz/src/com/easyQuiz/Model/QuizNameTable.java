@@ -11,7 +11,7 @@ import com.google.appengine.api.datastore.Query;
 
 public class QuizNameTable {
 	
-	final static String QUIZNAMES = "QuizNames";
+	final static String QUIZNAMESTable = "QuizNames";
 	final static String QUIZNAME = "QuizName";
 	final static String AUTHOR = "Author";
 	final static String NUMBEROFQUESTION = "NumberOfQuestions";
@@ -32,7 +32,7 @@ public class QuizNameTable {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 
-		Query gaeQuery = new Query(QUIZNAMES);
+		Query gaeQuery = new Query(QUIZNAMESTable);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
 
@@ -49,16 +49,16 @@ public class QuizNameTable {
 	public Boolean saveQuizName() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query(QUIZNAMES);
+		Query gaeQuery = new Query(QUIZNAMESTable);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity employee = new Entity(QUIZNAMES, list.size() + 1);
+		Entity quiz = new Entity(QUIZNAMESTable, list.size() + 1);
 
-		employee.setProperty(AUTHOR, this.author);
-		employee.setProperty(QUIZNAME, this.quizName);
-		employee.setProperty(NUMBEROFQUESTION, this.numberOfQuestions);
-		datastore.put(employee);
+		quiz.setProperty(AUTHOR, this.author);
+		quiz.setProperty(QUIZNAME, this.quizName);
+		quiz.setProperty(NUMBEROFQUESTION, this.numberOfQuestions);
+		datastore.put(quiz);
 
 		return true;
 
@@ -68,7 +68,7 @@ public class QuizNameTable {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 
-		Query gaeQuery = new Query(QUIZNAMES);
+		Query gaeQuery = new Query(QUIZNAMESTable);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		for (Entity entity : pq.asIterable()) {
 			
@@ -86,7 +86,7 @@ public class QuizNameTable {
 	public static int getTableSize() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query(QUIZNAMES);
+		Query gaeQuery = new Query(QUIZNAMESTable);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
@@ -97,7 +97,7 @@ public class QuizNameTable {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 
-		Query gaeQuery = new Query(QUIZNAMES);
+		Query gaeQuery = new Query(QUIZNAMESTable);
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		
 		int i = 0;
@@ -114,6 +114,24 @@ public class QuizNameTable {
 		}
 
 		return null;
+	}
+	
+	public static boolean isAuthor(String author , String quizName) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+
+		Query gaeQuery = new Query(QUIZNAMESTable);
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+
+			if (entity.getProperty(QUIZNAME).toString().equals(quizName)  
+				&& entity.getProperty(AUTHOR).toString().equals(author)	)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

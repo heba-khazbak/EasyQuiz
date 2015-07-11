@@ -3,13 +3,13 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Welcome!</title>
+  <title>Signup!</title>
 </head>
 <body>
   <form action="/easyquiz/response" method="post">
-  Name : <input type="text" name="uname" /> <br>
-  Email : <input type="text" name="email" /> <br>
-  Password : <input type="password" name="password" /> <br>
+  Name : <input type="text" name="uname" required /> <br>
+  Email : <input type="text" name="email" required /> <br>
+  Password : <input type="password" name="password" required /> <br>
   <input type="submit" value="Register">
   
   </form>

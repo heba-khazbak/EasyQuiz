@@ -4,14 +4,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>Thank you</title>
+<title>Registration Response</title>
 </head>
 <body>
-<p>  <%=session.getAttribute("msg") %>  </p>
+<%@ page import="com.easyQuiz.Controller.*" %>
+<%@ page import="java.util.*" %>
+<%
+out.println(UserController.msg);
+%>
 
 <br>
 
-<a href="/easyquiz/home2">return to your HomePage</a> <br><br>
+<a href="/easyquiz">return</a> <br><br>
 
 
 

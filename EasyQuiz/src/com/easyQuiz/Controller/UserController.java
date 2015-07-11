@@ -32,6 +32,9 @@ import com.easyQuiz.Model.UserEntity;
 @Path("/")
 @Produces("text/html")
 public class UserController {
+	public static boolean wrongUser = false;
+	public static String msg = "";
+	
 	
 	@GET
 	@Path("/home2")
@@ -99,21 +102,23 @@ public class UserController {
 	 */
 	@POST
 	@Path("/response")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String response(@FormParam("uname") String uname,
+	@Produces("text/html")
+	public Response response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
 		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
 		String urlParameters = "uname=" + uname + "&email=" + email
 				+ "&password=" + pass;
 		JSONObject object = Connector.callService(serviceUrl ,urlParameters );
 		if (object.get("Status").equals("OK"))
-			return "Registered Successfully";
+			msg = "Registered Successfully";
 		else if (object.get("Status").equals("exists"))
-			return "User Already exists";
+			msg =  "User Already exists";
 		else if (object.get("Status").equals("empty"))
-			return "you should fill all the fields!";
+			msg = "you should fill all the fields!";
+		else
+			msg = "Failed";
 		
-		return "Failed";
+		return Response.ok(new Viewable("/jsp/RegistrationResponse")).build();
 	}
 
 	/**
@@ -135,13 +140,18 @@ public class UserController {
 		String serviceUrl = "http://localhost:8888/rest/LoginService";
 		String urlParameters = "uname=" + uname + "&password=" + pass;
 		JSONObject object = Connector.callService(serviceUrl ,urlParameters );
-		if (object.get("Status").equals("Failed"))
-			return null;
 		
-		Map<String, String> map = new HashMap<String, String>();
+		if (object.get("Status").equals("Failed"))
+		{
+			wrongUser = true;
+			return Response.ok(new Viewable("/jsp/login")).build();	
+		}
+			
 		UserEntity user = UserEntity.getUser(object.toJSONString());
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("name", user.getName());
 		map.put("email", user.getEmail());
+		wrongUser = false;
 			
 		HttpSession session = request.getSession(true);
 			
@@ -171,7 +181,8 @@ public class UserController {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("email", "");
 			session.setAttribute("name", "");
-			
+			wrongUser = false;
+			session.invalidate();
 			
 			return Response.ok(new Viewable("/jsp/login")).build();	
 		}catch(Exception e)

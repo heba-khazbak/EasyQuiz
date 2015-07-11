@@ -27,19 +27,24 @@ public class QuizTakerController {
 	public static Vector<QuestionBuilder> myQuestions;
 	public static int index = 0;
 	public static int score = 0;
+	public static String quizName = "";
 
 
 	@GET
 	@Path("/randomQuiz")
 	@Produces("text/html")
-	public Response createQuiz() {
+	public Response createQuiz(@Context HttpServletRequest request) {
 			
 	String serviceUrl = "http://localhost:8888/rest/RandomQuizService";
 	String urlParameters ="" ;
 	JSONArray array = Connector.callServiceArray(serviceUrl ,urlParameters);
 	myQuestions = new Vector<QuestionBuilder>();
 	
-	for (int i = 0 ; i < array.size() ; i++)
+	
+	JSONObject first = (JSONObject)array.get(0);
+	quizName = first.get("Name").toString();
+	
+	for (int i = 1 ; i < array.size() ; i++)
 	{
 		JSONObject obj = (JSONObject)array.get(i);
 		QuestionBuilder question = new QuestionBuilder (obj.get(QuestionBuilder.QUESTION).toString(),
@@ -49,8 +54,10 @@ public class QuizTakerController {
 		
 		myQuestions.add(question);
 	}
-			
-		
+	
+	HttpSession session = request.getSession(false);
+	session.setAttribute("msg", "");	
+	
 	return Response.ok(new Viewable("/jsp/viewQuiz")).build();
 		
 	}
@@ -60,18 +67,32 @@ public class QuizTakerController {
 	@Produces("text/html")
 	public Response checkAnswer(@Context HttpServletRequest request,@FormParam("answer") String answer)
 	{
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		boolean correct = false;
 		if (myQuestions.get(index).correctAnswer.equals(answer))
 		{
 			correct = true;
 			score++;
+			session.setAttribute("msg", "correct");
 		}
+		else
+		{
+			session.setAttribute("msg", "wrong");
+		}
+		
 		index++;
 		if (index >= myQuestions.size())
 		{
-			session.setAttribute("msg", "your score is " + score);
+			session.setAttribute("msg",session.getAttribute("name") +  "! your score is " + score);
+			
+			// call service to save score 
+			String serviceUrl = "http://localhost:8888/rest/saveQuizScoreService";
+			String urlParameters ="userName=" + session.getAttribute("name") + "&quizName=" + quizName + "&score=" + score;
+					
+			JSONObject object = Connector.callService(serviceUrl ,urlParameters );
+			
 			myQuestions = null;
+			quizName = "";
 			score =0;
 			index = 0;
 			return Response.ok(new Viewable("/jsp/ThankYouPage")).build();

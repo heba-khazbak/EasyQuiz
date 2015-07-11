@@ -13,9 +13,9 @@ import com.easyQuiz.Model.UserEntity;
  * This class contains REST services, also contains action function for web
  * application
  * 
- * @author Mohamed Samir
+ * @author Heba Khazbak
  * @version 1.0
- * @since 2014-02-12
+ * @since 10-7-2015
  *
  */
 @Path("/")

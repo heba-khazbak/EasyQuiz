@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>Quiz</title>
+<title>Create new Quiz</title>
 </head>
 
 <body>
@@ -21,11 +21,11 @@
 %>
 
   <form action="/easyquiz/createTheQuiz" method="post">
-  Question : <input type="text" name="Question" /> <br>
-  Answer1 : <input type="text" name="Answer1" /> <br>
-  Answer2 : <input type="text" name="Answer2" /> <br>
-  Answer3 : <input type="text" name="Answer3" /> <br>
-  Answer4 : <input type="text" name="Answer4" /> <br>
+  Question : <input type="text" name="Question" required /> <br>
+  Answer1 : <input type="text" name="Answer1" required /> <br>
+  Answer2 : <input type="text" name="Answer2" required /> <br>
+  Answer3 : <input type="text" name="Answer3" required /> <br>
+  Answer4 : <input type="text" name="Answer4" required /> <br>
   Correct Answer Number 
 	<select name="CorrectAnswer">
   <option value="1">1</option>

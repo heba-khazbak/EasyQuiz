@@ -47,6 +47,8 @@
   <input type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer4 %>>
   
   </form>
+  
+  <p>  <%=session.getAttribute("msg") %>  </p>
 
 </body>
 </html>

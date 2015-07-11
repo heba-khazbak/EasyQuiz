@@ -1,6 +1,5 @@
 package com.easyQuiz.Model;
 
-import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -10,9 +9,7 @@ import org.json.simple.parser.ParseException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -21,6 +18,7 @@ public class UserEntity {
 	private String name;
 	private String email;
 	private String password;
+	String score;
 
 	/**
 	 * Constructor accepts user data
@@ -36,6 +34,7 @@ public class UserEntity {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		score = "0";
 
 	}
 	
@@ -51,6 +50,19 @@ public class UserEntity {
 
 	public String getPass() {
 		return password;
+	}
+	
+	public int getScore() {
+		return Integer.parseInt(score);
+	}
+	
+	public void setScore(int s) {
+		score = "" + s;
+	}
+	
+	static int convertToInt(String x)
+	{
+		return Integer.parseInt(x);
 	}
 
 	/**
@@ -138,17 +150,43 @@ public class UserEntity {
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity employee = new Entity("users", list.size() + 1);
+		Entity user = new Entity("users", list.size() + 1);
 
-		employee.setProperty("name", this.name);
-		employee.setProperty("email", this.email);
-		employee.setProperty("password", this.password);
-		datastore.put(employee);
+		user.setProperty("name", this.name);
+		user.setProperty("email", this.email);
+		user.setProperty("password", this.password);
+		user.setProperty("score", this.score);
+		datastore.put(user);
 
 		return true;
 
 	}
 	
+	public static void updateUserScore(String userName , String newScore) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("users");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+
+		
+
+		for (Entity entity : pq.asIterable()) {
+
+			if (entity.getProperty("name").toString().equals(userName))
+			{
+				String oldScore = entity.getProperty("score").toString();
+				int myScore = convertToInt(oldScore) + convertToInt(newScore) ;
+				System.out.println("score " + myScore);
+				
+				entity.setProperty("score", myScore);
+				datastore.put(entity);
+			}
+		}
+
+		
+
+	}
 	
 	
 	
