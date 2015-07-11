@@ -4,6 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Login Page</title>
+
+<style type="text/css">
+
+<%@ include file="css/styleLogin.css" %>
+
+</style>
 </head>
 <body>
 
@@ -11,24 +17,37 @@
 <%@ page import="java.util.*" %>
 
 
+
+
+  <h1>Login Form</h1>
+					
+	
+<div class="login">
+    
+	<form action="/easyquiz/home" method="post">
+	<input name="uname" type="text" value="User Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" />
+	<input name="password" type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}"required />
+        <br> <br> 
+    <label  class="hvr-sweep-to-bottom">
+	<input type="submit" value="Login"/>
+	</label>
+	</form>
+	
+    <div class="clear"> </div>
+	
+	<h3>Not a member ? <a href="/easyquiz/signup/">Sign up now!</a>  </h3>
+<h4>	
 <script>
 <%
 if (UserController.wrongUser)
 {
 %>
-    alert("Wrong userName or Password");
+    document.write("Wrong Username or Password");
 <%
 }
 %>
 </script>
-
-
-<form action="/easyquiz/home" method="post" onsubmit="return welcome()">
-  Name : <input type="text" name="uname" required /> <br>
-  Password : <input type="password" name="password" required /> <br>
-  <input type = "hidden" name ="currentUser" value = ${it.name}>
-  <input type="submit" value="Login">
-  
-  </form>
+</h4>
+</div>
 </body>
 </html>

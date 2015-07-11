@@ -4,14 +4,29 @@
 <html>
 <head>
   <title>Signup!</title>
+  
+  <style type="text/css">
+<%@ include file="css/styleLogin.css" %>
+</style>
+
 </head>
 <body>
-  <form action="/easyquiz/response" method="post">
-  Name : <input type="text" name="uname" required /> <br>
-  Email : <input type="text" name="email" required /> <br>
-  Password : <input type="password" name="password" required /> <br>
-  <input type="submit" value="Register">
-  
-  </form>
+
+ <h1>SignUp Form</h1>
+
+  <div class="login">
+    
+	<form action="/easyquiz/response" method="post">
+	<input name="uname" type="text" value="User Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" />
+	<input type="text" name="email" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" />
+	<input name="password" type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" />
+        <br> <br> 
+    <label  class="hvr-sweep-to-bottom">
+	<input type="submit" value="Signup"/>
+	</label>
+	</form>
+	
+    <div class="clear"> </div>
+    </div>
 </body>
 </html>

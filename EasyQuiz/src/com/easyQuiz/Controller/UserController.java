@@ -12,7 +12,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.json.simple.JSONObject;
@@ -70,7 +69,7 @@ public class UserController {
 	@GET
 	@Path("/")
 	public Response index() {
-		return Response.ok(new Viewable("/jsp/entryPoint")).build();
+		return Response.ok(new Viewable("/jsp/login")).build();
 	}
 
 	/**
@@ -81,9 +80,12 @@ public class UserController {
 	 */
 	@GET
 	@Path("/login")
+	@Produces("text/html")
 	public Response login() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
+	
+	
 	
 	
 
