@@ -35,7 +35,7 @@
           <li><a href="examples.html">Examples</a></li>
           <li><a href="page.html">A Page</a></li>
           <li><a href="another_page.html">Another Page</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
+           <li><a href="/easyquiz/logout">Logout</a></li>
         </ul>
       </div>
     </div>
@@ -49,43 +49,49 @@
 
 <%
 	int number = QuizTakerController.index +1;
-	out.println("Question number " + number );
-	out.println("<br>");
-	out.println(QuizTakerController.myQuestions.get(QuizTakerController.index).question);
+	out.println("<h3> Question number " + number + "</h3>" );
+	out.println("<h2>" + QuizTakerController.myQuestions.get(QuizTakerController.index).question + "</h2>" );
 
 %>
 
- <a href="#" class="hvr-sweep-to-right button">Sweep To Right</a>
-<a href="#" class="hvr-sweep-to-left button">Sweep To Left</a>
+
 
   <form action="/easyquiz/checkAnswer" method="post">
 	<input type="hidden" name = "answer" value = "1" >
- 
-  <input type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer1 %>>
-  
+ 	
+<label  class="hvr-sweep-to-right button">
+  <input class="submit" type="submit" value=<%out.println(QuizTakerController.myQuestions.get(QuizTakerController.index).answer1); %>>
+  </label>  
   </form>
   
+  <br>
  <form action="/easyquiz/checkAnswer" method="post">
 	<input type="hidden" name = "answer" value = "2" >
  
-  <input type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer2 %>>
+  <label  class="hvr-sweep-to-left button">
+  <input class="submit" type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer2 %>>
+  </label>
   
   </form>
   
+  <br>
    <form action="/easyquiz/checkAnswer" method="post">
 	<input type="hidden" name = "answer" value = "3" >
  
-  <input type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer3 %>>
-  
+<label  class="hvr-sweep-to-right button">
+  <input class="submit" type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer3 %>>
+  </label>  
   </form>
   
+  <br>
    <form action="/easyquiz/checkAnswer" method="post">
 	<input type="hidden" name = "answer" value = "4" >
- 
-  <input type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer4 %>>
+ <label  class="hvr-sweep-to-left button">
+  <input class="submit" type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer4 %>>
+  </label>
   
   </form>
-  
+ 
   <p>  <%=session.getAttribute("msg") %>  </p>
 
 

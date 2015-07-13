@@ -29,7 +29,7 @@ nav.horizontal ul li{ display: inline-block;}/* horizontal menu */
 img{max-width:100%;}
 /*end reset*/
 
-a.button,a.button2{
+.button,.button2{
   /*display: inline-block;*/
   /*vertical-align: middle;*/
   padding: 1em;
@@ -63,7 +63,7 @@ ul.bt-list li a{
 /* BACKGROUND TRANSITIONS */
 
 /* Sweep To Right */
-a.hvr-sweep-to-right {
+.hvr-sweep-to-right {
   display: inline-block;
   vertical-align: middle;
   -webkit-transform: translateZ(0);
@@ -80,7 +80,7 @@ a.hvr-sweep-to-right {
   background:#3598dc;
   color: #fff;
 }
-a.hvr-sweep-to-right:before {
+.hvr-sweep-to-right:before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -100,16 +100,16 @@ a.hvr-sweep-to-right:before {
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-a.hvr-sweep-to-right:hover,a.hvr-sweep-to-right:focus,a.hvr-sweep-to-right:active {
+.hvr-sweep-to-right:hover,a.hvr-sweep-to-right:focus,a.hvr-sweep-to-right:active {
   color: white;
 }
-a.hvr-sweep-to-right:hover:before,a.hvr-sweep-to-right:focus:before,a.hvr-sweep-to-right:active:before {
+.hvr-sweep-to-right:hover:before,a.hvr-sweep-to-right:focus:before,a.hvr-sweep-to-right:active:before {
   -webkit-transform: scaleX(1);
   transform: scaleX(1);
   
 }
 /* Sweep To Left */
-a.hvr-sweep-to-left {
+.hvr-sweep-to-left {
   display: inline-block;
   vertical-align: middle;
   -webkit-transform: translateZ(0);
@@ -126,7 +126,7 @@ a.hvr-sweep-to-left {
   background: #9a59b5;
   color: #fff;
 }
-a.hvr-sweep-to-left:before {
+.hvr-sweep-to-left:before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -146,10 +146,29 @@ a.hvr-sweep-to-left:before {
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-a.hvr-sweep-to-left:hover,a.hvr-sweep-to-left:focus,a.hvr-sweep-to-left:active {
+.hvr-sweep-to-left:hover,a.hvr-sweep-to-left:focus,a.hvr-sweep-to-left:active {
   color: white;
 }
-a.hvr-sweep-to-left:hover:before,a.hvr-sweep-to-left:focus:before,a.hvr-sweep-to-left:active:before {
+.hvr-sweep-to-left:hover:before,a.hvr-sweep-to-left:focus:before,a.hvr-sweep-to-left:active:before {
   -webkit-transform: scaleX(1);
   transform: scaleX(1);
 }
+
+.submit
+{
+	font-family: 'Open Sans', sans-serif;
+	font-size: 0.9em;
+  font-weight: 600;
+  width: 300px;
+  color: #fff;
+  background:none;
+  border: none; 
+  outline: none;
+  cursor:pointer;
+  transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+
+  
+  }

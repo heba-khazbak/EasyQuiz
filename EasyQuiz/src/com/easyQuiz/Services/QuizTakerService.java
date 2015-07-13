@@ -26,7 +26,7 @@ public class QuizTakerService {
 	public String createQuizService() {
 		
 		int tableSize = QuizNameTable.getTableSize();
-		int rand = (int) (Math.random()%tableSize);
+		int rand = (int) (Math.random()*tableSize);
 		//int rand = 0;
 		System.out.println("rand: " + rand);
 		QuizNameTable quiz = QuizNameTable.getQuizNameByID(rand);
