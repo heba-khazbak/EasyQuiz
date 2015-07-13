@@ -53,7 +53,7 @@ public class QuizNameTable {
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity quiz = new Entity(QUIZNAMESTable, list.size() + 1);
+		Entity quiz = new Entity(QUIZNAMESTable);
 
 		quiz.setProperty(AUTHOR, this.author);
 		quiz.setProperty(QUIZNAME, this.quizName);

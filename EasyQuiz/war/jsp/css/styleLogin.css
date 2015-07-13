@@ -43,7 +43,6 @@ h1 {
   padding: 4em 0em 1em 0em;
 }
 
-
 .login {
   width: 25%;
   margin: 2em auto 0em;
@@ -558,10 +557,5 @@ padding: 6px 10px;
 .forgot .checkbox {
   font-size: 11px;
 }
-.buttons ul li a.twit {
-  padding: 0.7em 4.6em 0.7em 4.5em;
-}
-.buttons ul li a.face {
-  padding: 0.7em 4.5em 0.7em 4.5em;
-}
+
 }

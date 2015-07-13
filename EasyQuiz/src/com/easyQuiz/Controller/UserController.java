@@ -120,7 +120,7 @@ public class UserController {
 		else
 			msg = "Failed";
 		
-		return Response.ok(new Viewable("/jsp/RegistrationResponse")).build();
+		return Response.ok(new Viewable("/jsp/register")).build();
 	}
 
 	/**

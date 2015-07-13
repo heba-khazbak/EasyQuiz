@@ -12,6 +12,9 @@
 </head>
 <body>
 
+<%@ page import="com.easyQuiz.Controller.*" %>
+<%@ page import="java.util.*" %>
+
  <h1>SignUp Form</h1>
 
   <div class="login">
@@ -27,6 +30,10 @@
 	</form>
 	
     <div class="clear"> </div>
+    <br>
+   <h4> <% out.println(UserController.msg); %></h4>
+	<h3><a href="/easyquiz">return</a></h3> 
+	
     </div>
 </body>
 </html>

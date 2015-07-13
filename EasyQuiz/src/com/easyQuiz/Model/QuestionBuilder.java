@@ -54,7 +54,7 @@ public class QuestionBuilder {
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity ques = new Entity(QUESTIONS, list.size() + 1);
+		Entity ques = new Entity(QUESTIONS);
 		
 		ques.setProperty(NAME, name);
 		ques.setProperty(QUESTION, this.question);

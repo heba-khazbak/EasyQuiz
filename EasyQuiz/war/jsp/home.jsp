@@ -17,14 +17,14 @@
       <div id="logo">
         <div id="logo_text">
           <!-- class="logo_colour", allows you to change the colour of the text -->
-          <h1><a href="index.html">Easy<span class="logo_colour">Quiz</span></a></h1>
+          <h1><a href="/easyquiz/home2/">Easy<span class="logo_colour">Quiz</span></a></h1>
           <h2>create.play.enjoy.</h2>
         </div>
       </div>
       <div id="menubar">
         <ul id="menu">
           <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-          <li class="selected"><a href="index.html">Home</a></li>
+          <li class="selected"><a href="/easyquiz/home2/">Home</a></li>
           <li><a href="examples.html">Examples</a></li>
           <li><a href="page.html">A Page</a></li>
           <li><a href="another_page.html">Another Page</a></li>
@@ -60,19 +60,20 @@
       </div>
       <div id="content">
         <!-- insert the page content here -->
-        <p> Welcome <%=session.getAttribute("name") %> to your homepage </p>
+        <h1> Welcome <%=session.getAttribute("name") %> to your homepage </h1>
 
-	<br><br>
+	<br>
+	<h3>
 	<a href="/easyquiz/createQuiz">Create new Quiz</a> <br><br>
 	
 	<a href="/easyquiz/randomQuiz">Take a Quiz</a> <br><br>
+	</h3>
 	
-	<a href="/easyquiz/logout">Logout</a> <br>
       </div>
     </div>
     <div id="content_footer"></div>
     <div id="footer">
-      Copyright &copy; colour_purple | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">HTML5 Web Templates</a>
+      Copyright &copy; easy_quiz | <a href="#">HTML5</a> | <a href="#">CSS</a> | <a href="#">HTML5 Web Templates</a>
     </div>
   </div>
 </body>
