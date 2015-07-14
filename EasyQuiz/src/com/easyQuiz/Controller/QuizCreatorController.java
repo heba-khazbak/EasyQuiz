@@ -24,13 +24,14 @@ import com.easyQuiz.Model.QuestionBuilder;
 @Produces("text/html")
 public class QuizCreatorController {
 	
-	public static String name="";
-	public static int questionNumber = 1;
-	public static String msg="";
 	
 	@GET
 	@Path("/createQuiz")
-	public Response signUp() {
+	public Response signUp(@Context HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		session.setAttribute("msg", "");
+		session.setAttribute("quizName" , "");
+		session.setAttribute("questionNumber", "1");
 		return Response.ok(new Viewable("/jsp/createQuiz")).build();
 	}
 
@@ -38,38 +39,46 @@ public class QuizCreatorController {
 	@POST
 	@Path("/createTheQuiz")
 	@Produces("text/html")
-	public Response createQuiz(@FormParam("Question") String Question,
+	public Response createQuiz(@Context HttpServletRequest request,@FormParam("Question") String Question,
 			@FormParam("Answer1") String Answer1, @FormParam("Answer2") String Answer2,
 			@FormParam("Answer3") String Answer3, @FormParam("Answer4") String Answer4,
 			@FormParam("CorrectAnswer") String CorrectAnswer) {
 		
-		String tempName = "";
+		HttpSession session = request.getSession(false);
+		String tempName = (String) session.getAttribute("quizName");
 		boolean exisit = true;
-		if (name.isEmpty())
+		if (tempName.isEmpty())
 		{
 			while(exisit)
 			{
 				tempName = new BigInteger(130, new SecureRandom()).toString(32);
 				exisit = QuestionBuilder.isQuizName(tempName);
 			}
-			name = tempName;
+			session.setAttribute("quizName", tempName);
+			
+			
 		}
 		
 		
 		String serviceUrl = "http://localhost:8888/rest/CreateQuizService";
-		String urlParameters ="Name=" + name + "&Question=" + Question + "&Answer1=" + Answer1
+		String urlParameters ="Name=" + tempName + "&Question=" + Question + "&Answer1=" + Answer1
 				+ "&Answer2=" + Answer2+ "&Answer3=" + Answer3+ "&Answer4=" + Answer4
 				+ "&CorrectAnswer=" + CorrectAnswer;
 		JSONObject object = Connector.callService(serviceUrl ,urlParameters );
 		if (object.get("Status").equals("OK"))
 		{
+			String x = (String) session.getAttribute("questionNumber");
+			int questionNumber = Integer.parseInt(x);
 			questionNumber++;
-			msg = "Enter the next Question";
+			session.setAttribute("questionNumber" , ""+ questionNumber);
+			
+			session.setAttribute("msg", "Enter the next Question");
+			
 			
 		}	
 		else if (object.get("Status").equals("empty"))
 		{
-			msg = "you should fill all the fields!";
+			session.setAttribute("msg", "you should fill all the fields!");
 			
 		}
 		
@@ -84,17 +93,20 @@ public class QuizCreatorController {
 	public Response createQuiz(@Context HttpServletRequest request) {
 		
 		HttpSession session = request.getSession(true);
+		
+		String x = (String) session.getAttribute("questionNumber");
+		int questionNumber = Integer.parseInt(x);
+		
 		if (questionNumber > 1)
 		{
 			String serviceUrl = "http://localhost:8888/rest/FinishCreatingQuiz";
-			String urlParameters ="Name=" + name + "&Author=" + session.getAttribute("name") + "&NumberOfQuestions=" + --questionNumber;
+			String urlParameters ="Name=" + session.getAttribute("quizName") + "&Author=" + session.getAttribute("name") + "&NumberOfQuestions=" + --questionNumber;
 					
 			JSONObject object = Connector.callService(serviceUrl ,urlParameters );
 			if (object.get("Status").equals("OK"))
 			{
-				name = "";
-				questionNumber = 1;
-				msg = "";
+				session.setAttribute("quizName", "");
+				session.setAttribute("questionNumber", "1");
 				session.setAttribute("msg", "Thank you");
 			}
 			else

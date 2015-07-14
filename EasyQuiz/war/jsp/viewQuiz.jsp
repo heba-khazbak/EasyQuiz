@@ -44,23 +44,27 @@
       <div id="content">
         <!-- insert the page content here -->
         
-        <%@ page import="com.easyQuiz.Controller.*" %>
+        
 <%@ page import="java.util.*" %>
+<%@ page import="com.easyQuiz.Model.QuestionBuilder" %>
 
 <%
-	int number = QuizTakerController.index +1;
+	String x =(String) session.getAttribute("index");
+    int i = Integer.parseInt(x);
+	int number = i +1;
+	String json =(String) session.getAttribute("Questions");
+	QuestionBuilder myQuestion = QuestionBuilder.parseFromJson(json , i);
+	
 	out.println("<h3> Question number " + number + "</h3>" );
-	out.println("<h2>" + QuizTakerController.myQuestions.get(QuizTakerController.index).question + "</h2>" );
+	out.println("<h2>" + myQuestion.question + "</h2>" );
+	
 
 %>
-
-
-
-  <form action="/easyquiz/checkAnswer" method="post">
+	 <form action="/easyquiz/checkAnswer" method="post">
 	<input type="hidden" name = "answer" value = "1" >
  	
 <label  class="hvr-sweep-to-right button">
-  <input class="submit" type="submit" value=<%out.println(QuizTakerController.myQuestions.get(QuizTakerController.index).answer1); %>>
+  <input class="submit" type="submit" value=<%out.println(myQuestion.answer1); %>>
   </label>  
   </form>
   
@@ -69,7 +73,7 @@
 	<input type="hidden" name = "answer" value = "2" >
  
   <label  class="hvr-sweep-to-left button">
-  <input class="submit" type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer2 %>>
+  <input class="submit" type="submit" value=<%=myQuestion.answer2 %>>
   </label>
   
   </form>
@@ -79,7 +83,7 @@
 	<input type="hidden" name = "answer" value = "3" >
  
 <label  class="hvr-sweep-to-right button">
-  <input class="submit" type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer3 %>>
+  <input class="submit" type="submit" value=<%=myQuestion.answer3 %>>
   </label>  
   </form>
   
@@ -87,7 +91,7 @@
    <form action="/easyquiz/checkAnswer" method="post">
 	<input type="hidden" name = "answer" value = "4" >
  <label  class="hvr-sweep-to-left button">
-  <input class="submit" type="submit" value=<%=QuizTakerController.myQuestions.get(QuizTakerController.index).answer4 %>>
+  <input class="submit" type="submit" value=<%=myQuestion.answer4 %>>
   </label>
   
   </form>
@@ -98,6 +102,9 @@
 
       </div>
     </div>
+ 
+
+
     <div id="content_footer"></div>
     <div id="footer">
       Copyright &copy; easy_quiz | <a href="#">HTML5</a> | <a href="#">CSS</a> | <a href="#">HTML5 Web Templates</a>

@@ -36,18 +36,8 @@
     <div class="clear"> </div>
 	
 	<h3>Not a member ? <a href="/easyquiz/signup/">Sign up now!</a>  </h3>
-<h4>	
-<script>
-<%
-if (UserController.wrongUser)
-{
-%>
-    document.write("Wrong Username or Password");
-<%
-}
-%>
-</script>
-</h4>
+
+  <h4> <% if (request.getAttribute("msg")!=null)out.println(request.getAttribute("msg")); %></h4>
 </div>
 </body>
 </html>

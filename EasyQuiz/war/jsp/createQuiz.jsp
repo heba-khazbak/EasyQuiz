@@ -63,14 +63,12 @@
       <div id="content">
         <!-- insert the page content here -->
         <h1>Create New Quiz</h1>
-        <%@ page import="com.easyQuiz.Controller.*" %>
+       
 <%@ page import="java.util.*" %>
 
 <%
-
-	out.println(QuizCreatorController.msg);
-	out.println("<br>");
-	out.println("Question number: " + QuizCreatorController.questionNumber);
+	out.println(session.getAttribute("msg") + "<br>");
+	out.println("Question number: " + session.getAttribute("questionNumber"));
 
 %>
 

@@ -1,6 +1,7 @@
 package com.easyQuiz.Controller;
 
 
+
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,39 +25,31 @@ import com.easyQuiz.Model.QuestionBuilder;
 @Produces("text/html")
 public class QuizTakerController {
 	
-	public static Vector<QuestionBuilder> myQuestions;
-	public static int index = 0;
-	public static int score = 0;
-	public static String quizName = "";
 
 
 	@GET
 	@Path("/randomQuiz")
 	@Produces("text/html")
-	public Response createQuiz(@Context HttpServletRequest request) {
+	public Response takeQuiz(@Context HttpServletRequest request) {
 			
 	String serviceUrl = "http://localhost:8888/rest/RandomQuizService";
 	String urlParameters ="" ;
 	JSONArray array = Connector.callServiceArray(serviceUrl ,urlParameters);
-	myQuestions = new Vector<QuestionBuilder>();
+
 	
-	
-	JSONObject first = (JSONObject)array.get(0);
-	quizName = first.get("Name").toString();
-	
-	for (int i = 1 ; i < array.size() ; i++)
-	{
-		JSONObject obj = (JSONObject)array.get(i);
-		QuestionBuilder question = new QuestionBuilder (obj.get(QuestionBuilder.QUESTION).toString(),
-				obj.get(QuestionBuilder.ANSWER1).toString(),obj.get(QuestionBuilder.ANSWER2).toString(),
-				obj.get(QuestionBuilder.ANSWER3).toString(),obj.get(QuestionBuilder.ANSWER4).toString(),
-				obj.get(QuestionBuilder.CORRECTANSWER).toString());
-		
-		myQuestions.add(question);
-	}
 	
 	HttpSession session = request.getSession(false);
-	session.setAttribute("msg", "");	
+	JSONObject first = (JSONObject)array.get(0);
+	session.setAttribute("quizName", first.get("Name").toString());
+	
+	array.remove(0);
+	
+	session.setAttribute("msg", "");
+	
+	session.setAttribute("Questions",array.toString());
+	session.setAttribute("index","0" );
+	session.setAttribute("score","0" );
+	
 	
 	return Response.ok(new Viewable("/jsp/viewQuiz")).build();
 		
@@ -69,6 +62,16 @@ public class QuizTakerController {
 	{
 		HttpSession session = request.getSession(false);
 		boolean correct = false;
+		
+		String json =(String) session.getAttribute("Questions");
+		Vector<QuestionBuilder> myQuestions = QuestionBuilder.parseFromJson(json);
+		
+		String x =(String)session.getAttribute("index");
+		int index =Integer.parseInt(x);
+		x = (String) session.getAttribute("score");
+		int score = Integer.parseInt(x);
+
+		
 		if (myQuestions.get(index).correctAnswer.equals(answer))
 		{
 			correct = true;
@@ -81,20 +84,25 @@ public class QuizTakerController {
 		}
 		
 		index++;
+		
+		session.setAttribute("index","" + index );
+		session.setAttribute("score","" + score );
+		
 		if (index >= myQuestions.size())
 		{
 			session.setAttribute("msg",session.getAttribute("name") +  "! your score is " + score);
 			
 			// call service to save score 
 			String serviceUrl = "http://localhost:8888/rest/saveQuizScoreService";
-			String urlParameters ="userName=" + session.getAttribute("name") + "&quizName=" + quizName + "&score=" + score;
+			String urlParameters ="userName=" + session.getAttribute("name") + "&quizName=" + session.getAttribute("quizName") + "&score=" + score;
 					
 			JSONObject object = Connector.callService(serviceUrl ,urlParameters );
 			
-			myQuestions = null;
-			quizName = "";
-			score =0;
-			index = 0;
+			session.setAttribute("Questions","");
+			session.setAttribute("quizName", "");
+			session.setAttribute("index","0" );
+			session.setAttribute("score","0" );
+			
 			return Response.ok(new Viewable("/jsp/ThankYouPage")).build();
 		}
 			

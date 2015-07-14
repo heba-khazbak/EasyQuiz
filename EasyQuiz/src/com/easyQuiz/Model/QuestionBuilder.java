@@ -3,6 +3,11 @@ package com.easyQuiz.Model;
 import java.util.List;
 import java.util.Vector;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -13,7 +18,7 @@ import com.google.appengine.api.datastore.Query;
 /**
  * Created by Heba on 8/7/2015.
  */
-public class QuestionBuilder {
+public class QuestionBuilder  {
 	public final static String QUESTIONS = "Questions";
 	public final static String NAME = "Name";
 	public final static String QUESTION = "Question";
@@ -110,6 +115,36 @@ public class QuestionBuilder {
 		}
 
 		return myQuestions;
+	}
+	
+	public static Vector<QuestionBuilder> parseFromJson(String json) {
+		
+		Vector<QuestionBuilder> myQuestions = new Vector<QuestionBuilder>();
+		JSONParser parser = new JSONParser();
+		try {
+			JSONArray array = (JSONArray) parser.parse(json);
+			for (int i = 0 ; i < array.size() ; i++)
+			{
+				JSONObject obj = (JSONObject)array.get(i);
+				QuestionBuilder question = new QuestionBuilder (obj.get(QuestionBuilder.QUESTION).toString(),
+						obj.get(QuestionBuilder.ANSWER1).toString(),obj.get(QuestionBuilder.ANSWER2).toString(),
+						obj.get(QuestionBuilder.ANSWER3).toString(),obj.get(QuestionBuilder.ANSWER4).toString(),
+						obj.get(QuestionBuilder.CORRECTANSWER).toString());
+				
+				myQuestions.add(question);
+			}
+			return myQuestions;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public static QuestionBuilder parseFromJson(String json , int i)
+	{
+		return parseFromJson(json).get(i);
 	}
 
 

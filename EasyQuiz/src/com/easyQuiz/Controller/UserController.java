@@ -31,9 +31,6 @@ import com.easyQuiz.Model.UserEntity;
 @Path("/")
 @Produces("text/html")
 public class UserController {
-	public static boolean wrongUser = false;
-	public static String msg = "";
-	
 	
 	@GET
 	@Path("/home2")
@@ -105,20 +102,21 @@ public class UserController {
 	@POST
 	@Path("/response")
 	@Produces("text/html")
-	public Response response(@FormParam("uname") String uname,
+	public Response response(@Context HttpServletRequest request ,@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
 		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
 		String urlParameters = "uname=" + uname + "&email=" + email
 				+ "&password=" + pass;
 		JSONObject object = Connector.callService(serviceUrl ,urlParameters );
 		if (object.get("Status").equals("OK"))
-			msg = "Registered Successfully";
+			request.setAttribute("msg", "Registered Successfully");
 		else if (object.get("Status").equals("exists"))
-			msg =  "User Already exists";
+			request.setAttribute("msg", "User Already exists");
 		else if (object.get("Status").equals("empty"))
-			msg = "you should fill all the fields!";
+			request.setAttribute("msg", "you should fill all the fields!");
 		else
-			msg = "Failed";
+			request.setAttribute("msg", "Failed");
+			
 		
 		return Response.ok(new Viewable("/jsp/register")).build();
 	}
@@ -145,7 +143,7 @@ public class UserController {
 		
 		if (object.get("Status").equals("Failed"))
 		{
-			wrongUser = true;
+			request.setAttribute("msg", "Wrong User Name ot Password!");
 			return Response.ok(new Viewable("/jsp/login")).build();	
 		}
 			
@@ -153,7 +151,6 @@ public class UserController {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("name", user.getName());
 		map.put("email", user.getEmail());
-		wrongUser = false;
 			
 		HttpSession session = request.getSession(true);
 			
@@ -183,7 +180,6 @@ public class UserController {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("email", "");
 			session.setAttribute("name", "");
-			wrongUser = false;
 			session.invalidate();
 			
 			return Response.ok(new Viewable("/jsp/login")).build();	
