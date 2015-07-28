@@ -133,5 +133,23 @@ public class QuizNameTable {
 
 		return false;
 	}
+	
+	public static int getNumberOfAuthoredQuizzes(String userName) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+
+		Query gaeQuery = new Query(QUIZNAMESTable);
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		int n = 0;
+		
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty(AUTHOR).toString().equals(userName))
+			{
+				n++;
+			}
+		}
+
+		return n;
+	}
 
 }

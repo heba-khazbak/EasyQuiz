@@ -23,34 +23,61 @@ public class QuizTakerService {
 
 	@POST
 	@Path("/RandomQuizService")
-	public String createQuizService() {
+	public String takeQuizService(@FormParam("userName") String userName) {
 		
-		int tableSize = QuizNameTable.getTableSize();
-		int rand = (int) (Math.random()*tableSize);
-		//int rand = 0;
-		System.out.println("rand: " + rand);
-		QuizNameTable quiz = QuizNameTable.getQuizNameByID(rand);
-		
-		
-		Vector<QuestionBuilder> myQuestions = QuestionBuilder.getQuestions(quiz.quizName);
-
 		JSONArray questionsArray = new JSONArray();
 		
-		JSONObject first = new JSONObject();
-		first.put("Name",quiz.quizName);
-		questionsArray.add(first);
+		int tableSize = QuizNameTable.getTableSize();
+		int numberOfAuthorQuizzes = QuizNameTable.getNumberOfAuthoredQuizzes(userName);
+		int numberOfPlayedQuizzes = QuizScoreTable.getNumberPlayed(userName);
 		
-		for (int i = 0 ; i < myQuestions.size() ; i++)
+		System.out.println(tableSize + " " + numberOfAuthorQuizzes + " " + numberOfPlayedQuizzes );
+		if (tableSize == numberOfAuthorQuizzes + numberOfPlayedQuizzes)
 		{
-			JSONObject myques = new JSONObject();
-			myques.put(QuestionBuilder.QUESTION,myQuestions.get(i).question);
-			myques.put(QuestionBuilder.ANSWER1,myQuestions.get(i).answer1);
-			myques.put(QuestionBuilder.ANSWER2,myQuestions.get(i).answer2);
-			myques.put(QuestionBuilder.ANSWER3,myQuestions.get(i).answer3);
-			myques.put(QuestionBuilder.ANSWER4,myQuestions.get(i).answer4);
-			myques.put(QuestionBuilder.CORRECTANSWER,myQuestions.get(i).correctAnswer);
-			questionsArray.add(myques);
+			// msg
+			JSONObject first = new JSONObject();
+			first.put("Name","Failed");
+			questionsArray.add(first);
 		}
+		else
+		{
+			QuizNameTable quiz;
+			while (true)
+			{
+				int rand = (int) (Math.random()*tableSize);
+				System.out.println("rand: " + rand);
+				quiz = QuizNameTable.getQuizNameByID(rand);
+				if (QuizNameTable.isAuthor(userName, quiz.quizName) || QuizScoreTable.isPlayed(userName, quiz.quizName))
+					continue;
+				break;
+			}
+			
+			Vector<QuestionBuilder> myQuestions = QuestionBuilder.getQuestions(quiz.quizName);
+
+			JSONObject first = new JSONObject();
+			first.put("Name",quiz.quizName);
+			questionsArray.add(first);
+			
+			for (int i = 0 ; i < myQuestions.size() ; i++)
+			{
+				JSONObject myques = new JSONObject();
+				myques.put(QuestionBuilder.QUESTION,myQuestions.get(i).question);
+				myques.put(QuestionBuilder.ANSWER1,myQuestions.get(i).answer1);
+				myques.put(QuestionBuilder.ANSWER2,myQuestions.get(i).answer2);
+				myques.put(QuestionBuilder.ANSWER3,myQuestions.get(i).answer3);
+				myques.put(QuestionBuilder.ANSWER4,myQuestions.get(i).answer4);
+				myques.put(QuestionBuilder.CORRECTANSWER,myQuestions.get(i).correctAnswer);
+				questionsArray.add(myques);
+			}
+			
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		return questionsArray.toString();
 	}

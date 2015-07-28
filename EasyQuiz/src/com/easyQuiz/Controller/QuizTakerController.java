@@ -31,15 +31,22 @@ public class QuizTakerController {
 	@Path("/randomQuiz")
 	@Produces("text/html")
 	public Response takeQuiz(@Context HttpServletRequest request) {
-			
+		
+	HttpSession session = request.getSession(false);		
 	String serviceUrl = "http://localhost:8888/rest/RandomQuizService";
-	String urlParameters ="" ;
+	String urlParameters ="userName=" + session.getAttribute("name") ;
 	JSONArray array = Connector.callServiceArray(serviceUrl ,urlParameters);
 
 	
 	
-	HttpSession session = request.getSession(false);
 	JSONObject first = (JSONObject)array.get(0);
+	
+	if (first.get("Name").toString().equals("Failed"))
+	{
+		session.setAttribute("msg", "Sorry , there is no new quizzes for you !");
+		return Response.ok(new Viewable("/jsp/ThankYouPage")).build();
+	}
+	
 	session.setAttribute("quizName", first.get("Name").toString());
 	
 	array.remove(0);
